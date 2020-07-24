@@ -52,6 +52,7 @@ import org.heigit.ors.routing.graphhopper.extensions.edgefilters.core.MaximumSpe
 import org.heigit.ors.routing.graphhopper.extensions.weighting.MaximumSpeedWeighting;
 import org.heigit.ors.routing.graphhopper.extensions.util.ORSParameters;
 import org.heigit.ors.util.CoordTools;
+import org.heigit.ors.weightaugmentation.AugmentedWeighting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -198,6 +199,7 @@ public class ORSGraphHopper extends GraphHopper {
 						"Vehicle " + vehicle + " unsupported. " + "Supported are: " + getEncodingManager());
 
 			HintsMap hints = request.getHints();
+			PMap additionalHints = request.getAdditionalHints();
 			String tModeStr = hints.get("traversal_mode", TraversalMode.EDGE_BASED.name());
 			TraversalMode tMode = TraversalMode.fromString(tModeStr);
 			if (hints.has(Parameters.Routing.EDGE_BASED))
@@ -334,6 +336,10 @@ public class ORSGraphHopper extends GraphHopper {
 
 				if(hints.has("maximum_speed")) {
 					weighting = new MaximumSpeedWeighting(encoder, hints, weighting, maximumSpeedLowerBound);
+				}
+
+				if (additionalHints.has("user_weights")) {
+					weighting = new AugmentedWeighting(encoder, additionalHints, weighting);
 				}
 
 
