@@ -42,7 +42,9 @@ public class HikingFlagEncoder extends FootFlagEncoder {
                 "hiking",
                 "mountain_hiking",
                 "demanding_mountain_hiking",
-                "alpine_hiking"
+                "alpine_hiking",
+                "demanding_alpine_hiking",
+                "difficult_alpine_hiking"
         ));
 
         preferredWayTags.addAll(Arrays.asList(
