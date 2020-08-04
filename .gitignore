@@ -17,12 +17,6 @@ nohup.out
 docker/elevation_cache/*
 elevation_cache/*
 
-# Ignore all app.config files except for the .sample one
-openrouteservice/WebContent/WEB-INF/app.config*
-!openrouteservice/WebContent/WEB-INF/app.config.sample
-openrouteservice/src/main/resources/app.config*
-!openrouteservice/src/main/resources/app.config.sample
-
 # ignore osm files
 openrouteservice/src/main/files/osm/*
 
