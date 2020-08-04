@@ -3,7 +3,7 @@ FROM openjdk:8-jdk
 ENV MAVEN_OPTS="-Dmaven.repo.local=.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
 ENV MAVEN_CLI_OPTS="--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
-ARG APP_CONFIG=./openrouteservice/src/main/resources/app.config.sample
+ARG APP_CONFIG=./openrouteservice/src/main/resources/app.config
 ARG OSM_URL=http://download.geofabrik.de/europe/slovenia-latest.osm.pbf
 
 WORKDIR /ors-core
