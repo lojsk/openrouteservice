@@ -205,9 +205,6 @@ public abstract class FootFlagEncoder extends ORSAbstractFlagEncoder {
         if (highwayValue == null)
             return handleNonHighways(way);
 
-        if (hasTooDifficultSacScale(way))
-            return EncodingManager.Access.CAN_SKIP;
-
         // no need to evaluate ferries or fords - already included here
         if (way.hasTag(OSMTags.Keys.FOOT, intendedValues))
             return EncodingManager.Access.WAY;

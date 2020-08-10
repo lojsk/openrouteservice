@@ -51,7 +51,8 @@ public class HikingFlagEncoder extends FootFlagEncoder {
                 "mountain_hiking",
                 "demanding_mountain_hiking",
                 "alpine_hiking",
-                "demanding_alpine_hiking"
+                "demanding_alpine_hiking",
+                "difficult_alpine_hiking"
         ));
 
         preferredWayTags.addAll(Arrays.asList(
@@ -65,6 +66,7 @@ public class HikingFlagEncoder extends FootFlagEncoder {
         sacScaleSpeeds.put("demanding_mountain_hiking", 1.2);
         sacScaleSpeeds.put("alpine_hiking", 1.0);
         sacScaleSpeeds.put("demanding_alpine_hiking", 0.9);
+        sacScaleSpeeds.put("difficult_alpine_hiking", 0.8);
 
         init();
     }
@@ -106,7 +108,7 @@ public class HikingFlagEncoder extends FootFlagEncoder {
         double speed = speedDefault;
 
         String tt = way.getTag(OSMTags.Keys.SAC_SCALE);
-        if (!Helper.isEmpty(tt)) {
+        if (!Helper.isEmpty(tt) && sacScaleSpeeds.get(tt) != null) {
             speed = sacScaleSpeeds.get(tt);
         }
 
