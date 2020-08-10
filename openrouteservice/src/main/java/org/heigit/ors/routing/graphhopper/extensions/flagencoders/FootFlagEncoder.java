@@ -43,7 +43,7 @@ import static com.graphhopper.routing.util.PriorityCode.*;
  */
 public abstract class FootFlagEncoder extends ORSAbstractFlagEncoder {
     static final int SLOW_SPEED = 2;
-    private static final int MEAN_SPEED = 5;
+    private static final int MEAN_SPEED = 4;
     static final int FERRY_SPEED = 15;
     public static final String KEY_DESIGNATED = "designated";
 
@@ -151,7 +151,7 @@ public abstract class FootFlagEncoder extends ORSAbstractFlagEncoder {
         // first two bits are reserved for route handling in superclass
         super.createEncodedValues(registerNewEncodedValue, prefix, index);
         // larger value required - ferries are faster than pedestrians
-        speedEncoder = new UnsignedDecimalEncodedValue(getKey(prefix, "average_speed"), speedBits, speedFactor, false);
+        speedEncoder = new UnsignedDecimalEncodedValue(getKey(prefix, "average_speed"), speedBits, speedFactor, true);
         registerNewEncodedValue.add(speedEncoder);
         priorityWayEncoder = new UnsignedDecimalEncodedValue(getKey(prefix, FlagEncoderKeys.PRIORITY_KEY), 3, PriorityCode.getFactor(1), false);
         registerNewEncodedValue.add(priorityWayEncoder);

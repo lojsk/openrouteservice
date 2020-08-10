@@ -15,12 +15,19 @@
 
 package org.heigit.ors.routing.graphhopper.extensions.flagencoders;
 
+import com.graphhopper.reader.ReaderWay;
+import com.graphhopper.routing.util.EncodingManager;
+import com.graphhopper.routing.util.PriorityCode;
+import com.graphhopper.storage.IntsRef;
+import com.graphhopper.util.Helper;
 import com.graphhopper.util.PMap;
+import org.heigit.ors.routing.graphhopper.extensions.OSMTags;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-import static com.graphhopper.routing.util.PriorityCode.BEST;
-import static com.graphhopper.routing.util.PriorityCode.VERY_NICE;
+import static com.graphhopper.routing.util.PriorityCode.*;
 
 public class HikingFlagEncoder extends FootFlagEncoder {
     public HikingFlagEncoder(PMap properties) {
@@ -29,6 +36,7 @@ public class HikingFlagEncoder extends FootFlagEncoder {
         this.properties = properties;
         this.setBlockFords(properties.getBool("block_fords", false));
     }
+    private final Map<String, Double> sacScaleSpeeds = new HashMap<>();
 
     private HikingFlagEncoder(int speedBits, double speedFactor) {
         super(speedBits, speedFactor);
@@ -43,8 +51,7 @@ public class HikingFlagEncoder extends FootFlagEncoder {
                 "mountain_hiking",
                 "demanding_mountain_hiking",
                 "alpine_hiking",
-                "demanding_alpine_hiking",
-                "difficult_alpine_hiking"
+                "demanding_alpine_hiking"
         ));
 
         preferredWayTags.addAll(Arrays.asList(
@@ -52,6 +59,12 @@ public class HikingFlagEncoder extends FootFlagEncoder {
                 "path",
                 "footway"
         ));
+
+        sacScaleSpeeds.put("hiking", 3.0);
+        sacScaleSpeeds.put("mountain_hiking", 1.5);
+        sacScaleSpeeds.put("demanding_mountain_hiking", 1.2);
+        sacScaleSpeeds.put("alpine_hiking", 1.0);
+        sacScaleSpeeds.put("demanding_alpine_hiking", 0.9);
 
         init();
     }
@@ -65,4 +78,39 @@ public class HikingFlagEncoder extends FootFlagEncoder {
     public String toString() {
         return FlagEncoderNames.HIKING_ORS;
     }
+
+    @Override
+    public IntsRef handleWayTags(IntsRef edgeFlags, ReaderWay way, EncodingManager.Access access, long relationFlags) {
+        if (access.canSkip()) {
+            return edgeFlags;
+        }
+
+        if (!access.isFerry()) {
+            speedEncoder.setDecimal(false, edgeFlags, getSpeed(way));
+        } else {
+            speedEncoder.setDecimal(false, edgeFlags, getFerrySpeed(way));
+        }
+        int priorityFromRelation = 0;
+        if (relationFlags != 0) {
+            priorityFromRelation = (int) relationCodeEncoder.getValue(relationFlags);
+        }
+
+        accessEnc.setBool(false, edgeFlags, true);
+        accessEnc.setBool(true, edgeFlags, true);
+
+        priorityWayEncoder.setDecimal(false, edgeFlags, PriorityCode.getFactor(handlePriority(way, priorityFromRelation)));
+        return edgeFlags;
+    }
+
+    private double getSpeed(ReaderWay way) {
+        double speed = speedDefault;
+
+        String tt = way.getTag(OSMTags.Keys.SAC_SCALE);
+        if (!Helper.isEmpty(tt)) {
+            speed = sacScaleSpeeds.get(tt);
+        }
+
+        return speed;
+    }
+
 }
