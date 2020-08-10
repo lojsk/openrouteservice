@@ -61,14 +61,14 @@ public class HikingFlagEncoder extends FootFlagEncoder {
                 "footway"
         ));
 
-        sacScaleSpeeds.put("hiking", 3.0);
-        sacScaleSpeeds.put("mountain_hiking", 1.5);
-        sacScaleSpeeds.put("demanding_mountain_hiking", 1.2);
+        sacScaleSpeeds.put("hiking", 4.0);
+        sacScaleSpeeds.put("mountain_hiking", 2.7);
+        sacScaleSpeeds.put("demanding_mountain_hiking", 1.3);
         sacScaleSpeeds.put("alpine_hiking", 1.0);
         sacScaleSpeeds.put("demanding_alpine_hiking", 0.9);
         sacScaleSpeeds.put("difficult_alpine_hiking", 0.8);
 
-        speedDefault = 3.0;
+        speedDefault = 4.0;
         init();
     }
 
