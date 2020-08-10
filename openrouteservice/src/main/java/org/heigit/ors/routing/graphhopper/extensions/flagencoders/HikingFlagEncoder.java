@@ -90,6 +90,9 @@ public class HikingFlagEncoder extends FootFlagEncoder {
             setSpeed(false, edgeFlags, getFerrySpeed(way));
         }
 
+        accessEnc.setBool(false, edgeFlags, true);
+        accessEnc.setBool(true, edgeFlags, true);
+
         int priorityFromRelation = 0;
         if (relationFlags != 0) {
             priorityFromRelation = (int) relationCodeEncoder.getValue(relationFlags);
