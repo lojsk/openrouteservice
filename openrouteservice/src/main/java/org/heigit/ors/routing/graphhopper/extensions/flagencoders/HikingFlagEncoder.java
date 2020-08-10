@@ -68,6 +68,7 @@ public class HikingFlagEncoder extends FootFlagEncoder {
         sacScaleSpeeds.put("demanding_alpine_hiking", 0.9);
         sacScaleSpeeds.put("difficult_alpine_hiking", 0.8);
 
+        speedDefault = 3.0;
         init();
     }
 
@@ -83,36 +84,28 @@ public class HikingFlagEncoder extends FootFlagEncoder {
 
     @Override
     public IntsRef handleWayTags(IntsRef edgeFlags, ReaderWay way, EncodingManager.Access access, long relationFlags) {
-        if (access.canSkip()) {
-            return edgeFlags;
-        }
-
         if (!access.isFerry()) {
             speedEncoder.setDecimal(false, edgeFlags, getSpeed(way));
         } else {
-            speedEncoder.setDecimal(false, edgeFlags, getFerrySpeed(way));
+            setSpeed(false, edgeFlags, getFerrySpeed(way));
         }
+
         int priorityFromRelation = 0;
         if (relationFlags != 0) {
             priorityFromRelation = (int) relationCodeEncoder.getValue(relationFlags);
         }
-
-        accessEnc.setBool(false, edgeFlags, true);
-        accessEnc.setBool(true, edgeFlags, true);
 
         priorityWayEncoder.setDecimal(false, edgeFlags, PriorityCode.getFactor(handlePriority(way, priorityFromRelation)));
         return edgeFlags;
     }
 
     private double getSpeed(ReaderWay way) {
-        double speed = speedDefault;
-
         String tt = way.getTag(OSMTags.Keys.SAC_SCALE);
         if (!Helper.isEmpty(tt) && sacScaleSpeeds.get(tt) != null) {
-            speed = sacScaleSpeeds.get(tt);
+            return sacScaleSpeeds.get(tt);
         }
 
-        return speed;
+        return speedDefault;
     }
 
 }
