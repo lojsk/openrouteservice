@@ -4,7 +4,7 @@ ENV MAVEN_OPTS="-Dmaven.repo.local=.m2/repository -Dorg.slf4j.simpleLogger.log.o
 ENV MAVEN_CLI_OPTS="--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
 ARG APP_CONFIG=./openrouteservice/src/main/resources/app.config
-ARG OSM_URL=https://hribi-app.s3.eu-north-1.amazonaws.com/icons/osm/slovenia-latest.osm.pbf
+ARG OSM_URL=https://download.geofabrik.de/europe/alps-latest.osm.pbf
 
 WORKDIR /ors-core
 
