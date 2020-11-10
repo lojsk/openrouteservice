@@ -9,7 +9,7 @@ services:
       context: ../
       args:
         APP_CONFIG: ./openrouteservice/src/main/resources/${APP_CONFIG}
-        OSM_FILE: ./openrouteservice/src/main/files/osm/${OSM_FILE}
+        OSM_FILE: ./openrouteservice/src/main/files/${OSM_FILE}
     volumes:
       - ./graphs:/ors-core/data/graphs
       - ./elevation_cache:/ors-core/data/elevation_cache
