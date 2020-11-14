@@ -18,7 +18,11 @@ RUN wget -q https://archive.apache.org/dist/tomcat/tomcat-8/v8.0.32/bin/apache-t
     cp -R /tmp/apache-tomcat-8.0.32/* /usr/local/tomcat/ && \
     # Install dependencies and locales
     apt-get update -qq && apt-get install -qq -y locales nano maven moreutils jq && \
-    locale-gen en_US.UTF-8
+    locale-gen en_US.UTF-8 && \
+    # Replace paths in app.config to match docker setup
+    jq '.ors.services.routing.sources[0] = "data/osm_file.pbf"' /ors-core/openrouteservice/src/main/resources/app.config |sponge /ors-core/openrouteservice/src/main/resources/app.config && \
+    jq '.ors.services.routing.profiles.default_params.elevation_cache_path = "data/elevation_cache"' /ors-core/openrouteservice/src/main/resources/app.config |sponge /ors-core/openrouteservice/src/main/resources/app.config && \
+    jq '.ors.services.routing.profiles.default_params.graphs_root_path = "data/graphs"' /ors-core/openrouteservice/src/main/resources/app.config |sponge /ors-core/openrouteservice/src/main/resources/app.config
 
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 
