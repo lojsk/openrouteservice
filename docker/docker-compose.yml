@@ -8,7 +8,6 @@ services:
     build:
       context: ../
       args:
-        APP_CONFIG: ./openrouteservice/src/main/resources/${APP_CONFIG_FILE_NAME}
         OSM_FILE: ./openrouteservice/src/main/files/${OSM_FILE_NAME}
     volumes:
       - ./graphs:/ors-core/data/graphs
