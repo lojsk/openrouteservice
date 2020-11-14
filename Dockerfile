@@ -10,7 +10,7 @@ WORKDIR /ors-core
 
 COPY openrouteservice /ors-core/openrouteservice
 COPY $OSM_FILE /ors-core/data/osm_file.pbf
-COPY $APP_CONFIG /ors-core/openrouteservice/src/main/resources/app.config.sample
+COPY $APP_CONFIG /ors-core/openrouteservice/src/main/resources/app.config
 
 # Install tomcat
 RUN wget -q https://archive.apache.org/dist/tomcat/tomcat-8/v8.0.32/bin/apache-tomcat-8.0.32.tar.gz -O /tmp/tomcat.tar.gz && \
@@ -21,8 +21,6 @@ RUN wget -q https://archive.apache.org/dist/tomcat/tomcat-8/v8.0.32/bin/apache-t
     # Install dependencies and locales
     apt-get update -qq && apt-get install -qq -y locales nano maven moreutils jq && \
     locale-gen en_US.UTF-8 && \
-    # Rename to app.config
-    cp /ors-core/openrouteservice/src/main/resources/app.config.sample /ors-core/openrouteservice/src/main/resources/app.config && \
     # Replace paths in app.config to match docker setup
     jq '.ors.services.routing.sources[0] = "data/osm_file.pbf"' /ors-core/openrouteservice/src/main/resources/app.config |sponge /ors-core/openrouteservice/src/main/resources/app.config && \
     jq '.ors.services.routing.profiles.default_params.elevation_cache_path = "data/elevation_cache"' /ors-core/openrouteservice/src/main/resources/app.config |sponge /ors-core/openrouteservice/src/main/resources/app.config && \
