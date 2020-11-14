@@ -4,18 +4,14 @@ services:
     container_name: ors-app
     ports:
       - 8080:8080
-    #image: openrouteservice/openrouteservice:latest
     build:
       context: ../
-      args:
-        OSM_FILE: ./openrouteservice/src/main/files/${OSM_FILE_NAME}
     volumes:
       - ./graphs:/ors-core/data/graphs
       - ./elevation_cache:/ors-core/data/elevation_cache
       - ./logs/ors:/var/log/ors
       - ./logs/tomcat:/usr/local/tomcat/logs
       - ./conf:/ors-conf
-      #- ./your_osm.pbf:/ors-core/data/osm_file.pbf
     environment:
       - BUILD_GRAPHS=#{BUILD_GRAPHS}  # Forces the container to rebuild the graphs, e.g. when PBF is changed
       - "JAVA_OPTS=-Djava.awt.headless=true -server -XX:TargetSurvivorRatio=75 -XX:SurvivorRatio=64 -XX:MaxTenuringThreshold=3 -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:ParallelGCThreads=4 -Xms2g -Xmx6g"
