@@ -67,8 +67,8 @@ public class HikingFlagEncoder extends FootFlagEncoder {
         sacScaleSpeeds.put("mountain_hiking", 4.5);
         sacScaleSpeeds.put("demanding_mountain_hiking", 1.8);
         sacScaleSpeeds.put("alpine_hiking", 1.4);
-        sacScaleSpeeds.put("demanding_alpine_hiking", 1.2);
-        sacScaleSpeeds.put("difficult_alpine_hiking", 1.2);
+        sacScaleSpeeds.put("demanding_alpine_hiking", 1.1);
+        sacScaleSpeeds.put("difficult_alpine_hiking", 1.0);
 
         speedDefault = 5.0;
         init();
@@ -143,7 +143,7 @@ public class HikingFlagEncoder extends FootFlagEncoder {
             // s_3d/v=h/v_vert + s_2d/v_hor => v = s_3d / (h/v_vert + s_2d/v_hor) = sqrt(s²_2d + h²) / (h/v_vert + s_2d/v_hor)
             // slope=h/s_2d=~h/2_3d              = sqrt(1+slope²)/(slope+1/4.5) km/h
             // maximum slope is 0.37 (Ffordd Pen Llech)
-            double newSpeed = 0.5; // Math.sqrt(1 + slope * slope) / (slope + 1 / getSpeed(way));
+            double newSpeed = Math.sqrt(1 + slope * slope) / (slope + 1 / getSpeed(way));
             edge.set(speedEncoder, Helper.keepIn(newSpeed, 0.3, speedDefault));
         }
     }
